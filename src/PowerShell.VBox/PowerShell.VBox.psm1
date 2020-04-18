@@ -15,10 +15,13 @@ class VBoxMachine
         $this.CPUHotPlugEnabled = $object.CPUHotPlugEnabled
         $this.CPUExecutionCap = $object.CPUExecutionCap
         $this.MemorySize = $object.MemorySize
-        $this.SnapshotFolder = $object.SnapshotFolder
         $this.State = [VBoxMachineState]$object.State
         $this.LogFolder = $object.LogFolder
         $this.ClipboardMode = $object.ClipboardMode
+        $this.FirmwareType = $object.FirmwareType
+        $this.ChipsetType = $object.ChipsetType
+        $this.SnapshotFolder = $object.SnapshotFolder
+        $this.SettingsFilePath = $object.SettingsFilePath
     }
 
     [guid]$Id
@@ -29,10 +32,18 @@ class VBoxMachine
     [ValidateRange(0, 100)]
     [int]$CPUExecutionCap
     [int]$MemorySize
-    [System.IO.DirectoryInfo]$SnapshotFolder
     [VBoxMachineState]$State
     [System.IO.DirectoryInfo]$LogFolder
     [VBoxClipboardMode]$ClipboardMode
+    [VBoxFirmwareType]$FirmwareType
+    [VBoxChipsetType]$ChipsetType
+    [System.IO.DirectoryInfo]$SnapshotFolder
+    [System.IO.FileInfo]$SettingsFilePath
+}
+
+enum VBoxChipsetType {
+    PIIX3 = 1
+    ICH9 = 2
 }
 
 enum VBoxClipboardMode {
@@ -40,6 +51,14 @@ enum VBoxClipboardMode {
     HostToGuest = 1
     GuestToHost = 2
     Bidirectional = 3
+}
+
+enum VBoxFirmwareType {
+    BIOS = 0
+    EFI = 1
+    EFI32 = 2
+    EFI63 = 3
+    EFIDual = 4
 }
 
 enum VBoxMachineState {
