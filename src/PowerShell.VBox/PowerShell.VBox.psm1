@@ -17,6 +17,8 @@ class VBoxMachine
         $this.MemorySize = $object.MemorySize
         $this.SnapshotFolder = $object.SnapshotFolder
         $this.State = [VBoxMachineState]$object.State
+        $this.LogFolder = $object.LogFolder
+        $this.ClipboardMode = $object.ClipboardMode
     }
 
     [guid]$Id
@@ -29,6 +31,15 @@ class VBoxMachine
     [int]$MemorySize
     [System.IO.DirectoryInfo]$SnapshotFolder
     [VBoxMachineState]$State
+    [System.IO.DirectoryInfo]$LogFolder
+    [VBoxClipboardMode]$ClipboardMode
+}
+
+enum VBoxClipboardMode {
+    Disabled = 0
+    HostToGuest = 1
+    GuestToHost = 2
+    Bidirectional = 3
 }
 
 enum VBoxMachineState {
