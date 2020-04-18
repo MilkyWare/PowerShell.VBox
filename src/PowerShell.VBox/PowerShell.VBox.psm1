@@ -22,6 +22,7 @@ class VBoxMachine
         $this.ChipsetType = $object.ChipsetType
         $this.SnapshotFolder = $object.SnapshotFolder
         $this.SettingsFilePath = $object.SettingsFilePath
+        $this.DragNDropMode = $object.DnDMode
     }
 
     [guid]$Id
@@ -39,7 +40,7 @@ class VBoxMachine
     [VBoxChipsetType]$ChipsetType
     [System.IO.DirectoryInfo]$SnapshotFolder
     [System.IO.FileInfo]$SettingsFilePath
-    [VBoxDragNDropMode]$DragNDropMode = $object.DnDMode
+    [VBoxDragNDropMode]$DragNDropMode
 }
 
 enum VBoxChipsetType {
