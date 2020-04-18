@@ -39,6 +39,7 @@ class VBoxMachine
     [VBoxChipsetType]$ChipsetType
     [System.IO.DirectoryInfo]$SnapshotFolder
     [System.IO.FileInfo]$SettingsFilePath
+    [VBoxDragNDropMode]$DragNDropMode = $object.DnDMode
 }
 
 enum VBoxChipsetType {
@@ -47,6 +48,13 @@ enum VBoxChipsetType {
 }
 
 enum VBoxClipboardMode {
+    Disabled = 0
+    HostToGuest = 1
+    GuestToHost = 2
+    Bidirectional = 3
+}
+
+enum VBoxDragNDropMode {
     Disabled = 0
     HostToGuest = 1
     GuestToHost = 2
