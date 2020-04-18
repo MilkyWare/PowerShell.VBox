@@ -10,21 +10,45 @@ class VBoxMachine
     { 
         $this.Id = $object.Id
         $this.Name = $object.Name
+        $this.Description = $object.Description
         $this.CPUCount = $object.CPUCount
         $this.CPUHotPlugEnabled = $object.CPUHotPlugEnabled
         $this.CPUExecutionCap = $object.CPUExecutionCap
         $this.MemorySize = $object.MemorySize
         $this.SnapshotFolder = $object.SnapshotFolder
+        $this.State = [VBoxMachineState]$object.State
     }
 
     [guid]$Id
     [string]$Name
+    [string]$Description
     [int]$CPUCount
     [bool]$CPUHotPlugEnabled
     [ValidateRange(0, 100)]
     [int]$CPUExecutionCap
     [int]$MemorySize
     [System.IO.DirectoryInfo]$SnapshotFolder
+    [VBoxMachineState]$State
+}
+
+enum VBoxMachineState {
+    Stopped = 1
+    Saved = 2
+    Teleported = 3
+    Aborted = 4
+    Running = 5
+    Paused = 6
+    Stuck = 7
+    Snapshotting = 8
+    Starting = 9
+    Stopping = 10
+    Restoring = 11
+    TeleportingPausedVM = 12
+    TeleportingIn = 13
+    FaultTolerantSync = 14
+    DeletingSnapshotOnline = 15
+    DeletingSnapshot = 16
+    SettingUp = 17
 }
 #endregion
 
