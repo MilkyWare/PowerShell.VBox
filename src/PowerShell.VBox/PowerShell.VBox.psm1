@@ -172,7 +172,7 @@ function Suspend-Machine
                     Write-Verbose "Locking machine"
                     $machine.LockMachine($session, [VBoxLockType]::Shared)
 
-                    Write-Verbose "Stopping machine"
+                    Write-Verbose "Saving state"
                     $session.Machine.SaveState() | Out-Null
 
                     Write-Verbose "Unlocking machine"
