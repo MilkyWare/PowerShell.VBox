@@ -43,26 +43,30 @@ class VBoxMachine
     [VBoxDragNDropMode]$DragNDropMode
 }
 
-enum VBoxChipsetType {
+enum VBoxChipsetType
+{
     PIIX3 = 1
     ICH9 = 2
 }
 
-enum VBoxClipboardMode {
+enum VBoxClipboardMode
+{
     Disabled = 0
     HostToGuest = 1
     GuestToHost = 2
     Bidirectional = 3
 }
 
-enum VBoxDragNDropMode {
+enum VBoxDragNDropMode
+{
     Disabled = 0
     HostToGuest = 1
     GuestToHost = 2
     Bidirectional = 3
 }
 
-enum VBoxFirmwareType {
+enum VBoxFirmwareType
+{
     BIOS = 0
     EFI = 1
     EFI32 = 2
@@ -70,7 +74,15 @@ enum VBoxFirmwareType {
     EFIDual = 4
 }
 
-enum VBoxMachineState {
+enum VBoxLockType
+{
+    Shared = 1
+    Write = 2
+    VM = 3
+}
+
+enum VBoxMachineState
+{
     Stopped = 1
     Saved = 2
     Teleported = 3
@@ -132,6 +144,45 @@ function Get-Machines
             }
         }
         return $machines
+    }
+}
+
+function Suspend-Machine
+{
+    [CmdletBinding(SupportsShouldProcess = $true)]
+    param (
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [guid[]]$Id
+    )
+    process
+    {
+        foreach ($i in $Id)
+        {
+            Write-Verbose "Finding machine $i"
+            $machine = $vbox.FindMachine($i)
+
+            if ($machine)
+            {
+                Write-Verbose "Found {$machine.Name}"
+                if ($PSCmdlet.ShouldProcess($machine.Name))
+                {
+                    Write-Verbose "Creating VBox session"
+                    $session = New-Object -ComObject "VirtualBox.Session"
+
+                    Write-Verbose "Locking machine"
+                    $machine.LockMachine($session, [VBoxLockType]::Shared)
+
+                    Write-Verbose "Stopping machine"
+                    $session.Machine.SaveState() | Out-Null
+
+                    Write-Verbose "Unlocking machine"
+                    $session.UnlockMachine()
+                }
+                else
+                {
+                }
+            }
+        }
     }
 }
 #endregion
