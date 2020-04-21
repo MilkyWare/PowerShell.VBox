@@ -151,36 +151,33 @@ function Suspend-Machine
 {
     [CmdletBinding(SupportsShouldProcess = $true)]
     param (
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [guid[]]$Id
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [guid]$Id
     )
     process
     {
-        foreach ($i in $Id)
+        Write-Verbose "Finding machine $Id"
+        $machine = $vbox.FindMachine($Id)
+
+        if ($machine)
         {
-            Write-Verbose "Finding machine $i"
-            $machine = $vbox.FindMachine($i)
-
-            if ($machine)
+            Write-Verbose "Found {$machine.Name}"
+            if ($PSCmdlet.ShouldProcess($machine.Name))
             {
-                Write-Verbose "Found {$machine.Name}"
-                if ($PSCmdlet.ShouldProcess($machine.Name))
-                {
-                    Write-Verbose "Creating VBox session"
-                    $session = New-Object -ComObject "VirtualBox.Session"
+                Write-Verbose "Creating VBox session"
+                $session = New-Object -ComObject "VirtualBox.Session"
 
-                    Write-Verbose "Locking machine"
-                    $machine.LockMachine($session, [VBoxLockType]::Shared)
+                Write-Verbose "Locking machine"
+                $machine.LockMachine($session, [VBoxLockType]::Shared)
 
-                    Write-Verbose "Saving state"
-                    $session.Machine.SaveState() | Out-Null
+                Write-Verbose "Saving state"
+                $session.Machine.SaveState() | Out-Null
 
-                    Write-Verbose "Unlocking machine"
-                    $session.UnlockMachine()
-                }
-                else
-                {
-                }
+                Write-Verbose "Unlocking machine"
+                $session.UnlockMachine()
+            }
+            else
+            {
             }
         }
     }
